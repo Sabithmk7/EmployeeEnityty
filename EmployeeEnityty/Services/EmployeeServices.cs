@@ -10,7 +10,7 @@ namespace EmployeeEnityty.Services
 {
     public interface IEmployeeServices
     {
-        Task<IEnumerable<EmployeeDto>> GetAllEmployeesAsync();
+        Task<IEnumerable<EmployeeRelationDto>> GetAllEmployeesAsync();
         Task<Employee> GetByIdAsync(int id);
         Task UpdateEmployeeAsync(Employee newEmployee);
         Task AddEmployeeAsync(Employee employee);
@@ -26,14 +26,14 @@ namespace EmployeeEnityty.Services
             _dbContext = context;
         }
 
-        public async Task<IEnumerable<EmployeeDto>> GetAllEmployeesAsync()
+        public async Task<IEnumerable<EmployeeRelationDto>> GetAllEmployeesAsync()
         {
             var em =  await _dbContext.Employees.Include(x => x.Department).ToListAsync();
-            var e = em.Select(emp => new EmployeeDto
+            var e = em.Select(emp => new EmployeeRelationDto
             {
                 Id = emp.Id,
                 Name = emp.Name,
-                DepartmentName = emp?.Department.Name,
+                DepartmentName=emp.Department.Name,
                 Salary = emp.Salary
             });
             return e;
